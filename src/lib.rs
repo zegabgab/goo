@@ -1,4 +1,4 @@
-mod script;
+pub mod script;
 
 pub struct Game {
     name: String,
