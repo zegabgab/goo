@@ -2,3 +2,6 @@
 name = "goo"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+winit = "0.30.11"
