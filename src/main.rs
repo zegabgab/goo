@@ -1,4 +1,4 @@
-use winit::{self, application::ApplicationHandler, event::WindowEvent, event_loop::ActiveEventLoop, window::{Window, WindowId}};
+use winit::{self, application::ApplicationHandler, dpi::{LogicalSize, PhysicalSize}, event::WindowEvent, event_loop::ActiveEventLoop, platform::x11::WindowAttributesExtX11, window::{Window, WindowAttributes, WindowId}};
 
 #[derive(Default)]
 struct App {
@@ -7,13 +7,17 @@ struct App {
 
 impl ApplicationHandler for App {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        self.window = Some(event_loop.create_window(Window::default_attributes()).unwrap());
+        let window_atrributes = WindowAttributes::default()
+        .with_title("finestra sinestra")
+        .with_inner_size(LogicalSize::new(0.5, 0.5))
+        .with_name("AN APP HAHA", "an app instance");
+        self.window = Some(event_loop.create_window(window_atrributes).unwrap());
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
         match event {
             WindowEvent::CloseRequested => {
-                println!("The close button was pressed; stopping");
+                println!("The close button was pressed; stopping {}", self.window.as_ref().map(Window::title).unwrap_or(String::from("[no title found]")));
                 event_loop.exit();
             },
             WindowEvent::RedrawRequested => {
@@ -30,6 +34,7 @@ impl ApplicationHandler for App {
                 // You only need to call this if you've determined that you need to redraw in
                 // applications which do not always need to. Applications that redraw continuously
                 // can render here instead.
+                println!("redraw redraw");
                 self.window.as_ref().unwrap().request_redraw();
             }
             _ => (),
